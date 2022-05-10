@@ -1,0 +1,36 @@
+[user]
+	name = Metin OSMAN
+[core]
+	editor = vim
+[color]
+	ui = true
+	status = auto
+	branch = auto
+[push]
+	default = current
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	pr = !git prune-merged && git prune-squashmerged
+	prune-merged = !git remote prune origin && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -r git branch -v -D
+	prune-squashmerged = "!f() {\
+		curr_branch=$(git rev-parse --abbrev-ref HEAD); \
+		git for-each-ref refs/heads/ '--format=%(refname:short)' | while read branch; do \
+		  mergeBase=$(git merge-base $curr_branch $branch); \
+		  test \"$(git cherry $curr_branch $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _) | cut -d ' ' -f 1)\" = \"-\" && \
+		    git branch -v -D $branch; \
+		done; \
+		}; f"
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+#[url "ssh://git@github.com/"]
+#	insteadOf = https://github.com/
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main

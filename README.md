@@ -1,1 +1,1 @@
-curl -H 'Cache-Control: no-cache, no-store' -s https://raw.githubusercontent.com/MrCitron/dotfiles/main/install.sh | bash
+curl -s https://www.metinosman.com/install.sh | bash
